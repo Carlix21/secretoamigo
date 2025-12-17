@@ -287,6 +287,7 @@
         <button id="fullResetBtn" class="btn danger">Reset registros</button>
         <button id="importBtn" class="btn secondary">Importar usuarios</button>
         <button id="exportBtn" class="btn secondary">Exportar usuarios</button>
+        <button id="clearStorageBtn" class="btn danger">Limpiar todo</button>
       </div>
       <div id="admin_msg" class="hidden"></div>
       <div class="divider"></div>
@@ -336,7 +337,8 @@
       draw: 'sa_draw',
       reveals: 'sa_reveals',
       session: 'sa_session',
-      drawMeta: 'sa_draw_meta'
+      drawMeta: 'sa_draw_meta',
+      migrateDisabled: 'sa_migrate_disabled'
     };
     const ALLOWED = ['Carla','Marcia','Fernanda','Betsy','David','Diego','Carlos','Adrian','Leonardo'];
     const qs = (s) => document.querySelector(s);
@@ -384,13 +386,14 @@
     function setSession(s) { writeJSON(K.session, s); }
     function clearSession() { localStorage.removeItem(K.session); }
     const isHex64 = (s) => typeof s === 'string' && /^[0-9a-fA-F]{64}$/.test(s);
+    const isAllowedName = (n) => ALLOWED.some(a => a.toLowerCase() === String(n).toLowerCase());
     async function normalizeUsers(raw) {
       if (!raw) return [];
       const out = [];
       if (Array.isArray(raw)) {
         for (let i = 0; i < raw.length; i++) {
           const x = raw[i];
-          if (x && typeof x === 'object' && typeof x.name === 'string') {
+          if (x && typeof x === 'object' && typeof x.name === 'string' && isAllowedName(x.name) && isLettersOnly(x.name)) {
             if (typeof x.passwordHash === 'string' && x.passwordHash) {
               out.push({ name: x.name, passwordHash: x.passwordHash, createdAt: x.createdAt || nowISO(), updatedAt: nowISO() });
             } else if (typeof x.password === 'string' && x.password) {
@@ -406,7 +409,7 @@
         const entries = Object.entries(raw);
         for (let i = 0; i < entries.length; i++) {
           const [name, val] = entries[i];
-          if (typeof name !== 'string') continue;
+          if (typeof name !== 'string' || !isAllowedName(name) || !isLettersOnly(name)) continue;
           if (typeof val === 'string' && val) {
             const h = isHex64(val) ? val : await sha256(val);
             out.push({ name, passwordHash: h, createdAt: nowISO(), updatedAt: nowISO() });
@@ -432,6 +435,7 @@
       return Array.from(byName.values());
     }
     async function ensureUsersKey() {
+      if (readJSON(K.migrateDisabled, false)) return;
       const current = getUsers();
       if (Array.isArray(current) && current.length) return;
       const keys = Object.keys(localStorage);
@@ -440,7 +444,7 @@
         if (k === K.users) continue;
         const v = readJSON(k, null);
         const norm = await normalizeUsers(v);
-        if (norm.length) { saveUsers(norm); break; }
+        if (norm.length && norm.every(u => isAllowedName(u.name))) { saveUsers(norm); break; }
       }
     }
     function assignmentFor(name) {
@@ -717,10 +721,15 @@
     function handleFullReset() {
       clearMsg(qs('#admin_msg'));
       if (!confirm('¿Borrar todos los registros? Esta acción es irreversible.')) return;
-      saveUsers([]);
-      clearDraw();
-      saveReveals({});
+      localStorage.clear();
       setMsg(qs('#admin_msg'), 'Todos los registros, sorteo y revelados borrados.', 'success');
+      refreshAdmin();
+    }
+    function handleClearStorage() {
+      clearMsg(qs('#admin_msg'));
+      if (!confirm('Esto eliminará todo el almacenamiento de este sitio. ¿Continuar?')) return;
+      localStorage.clear();
+      setMsg(qs('#admin_msg'), 'Almacenamiento limpio por completo.', 'success');
       refreshAdmin();
     }
     async function boot() {
@@ -740,6 +749,7 @@
       qs('#cancelImportBtn').addEventListener('click', cancelImportPanel);
       qs('#exportBtn').addEventListener('click', handleExportUsers);
       qs('#closeExportBtn').addEventListener('click', closeExportPanel);
+      qs('#clearStorageBtn').addEventListener('click', handleClearStorage);
       qs('#toggleRegPass').addEventListener('click', () => togglePassword('#reg_pass', '#toggleRegPass'));
       qs('#toggleLoginPass').addEventListener('click', () => togglePassword('#login_pass', '#toggleLoginPass'));
       qs('#toggleCpNew').addEventListener('click', () => togglePassword('#cp_new', '#toggleCpNew'));
