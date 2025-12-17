@@ -114,6 +114,7 @@
       color: #111827;
       box-shadow: 0 8px 16px rgba(245,158,11,0.25);
     }
+    .btn.small { padding: 8px 10px; font-size: 12px; }
     .muted { color: var(--muted); font-size: 13px; }
     .error { color: #fecaca; background: #2e1b1b; border: 1px solid #7f1d1d; padding: 10px 12px; border-radius: 10px; }
     .success { color: #dcfce7; background: #0f2b1f; border: 1px solid #065f46; padding: 10px 12px; border-radius: 10px; }
@@ -178,6 +179,9 @@
         <div>
           <label for="reg_pass">Contraseña (exactamente 8, letras y números)</label>
           <input id="reg_pass" type="password" maxlength="8" placeholder="8 caracteres">
+          <div class="row" style="margin-top:6px">
+            <button type="button" id="toggleRegPass" class="btn small secondary">Mostrar</button>
+          </div>
         </div>
         <div class="muted">
           Regístrate con tu primer nombre completo exactamente como aparece. Participantes:
@@ -203,11 +207,38 @@
         <div>
           <label for="login_pass">Contraseña</label>
           <input id="login_pass" type="password" maxlength="32">
+          <div class="row" style="margin-top:6px">
+            <button type="button" id="toggleLoginPass" class="btn small secondary">Mostrar</button>
+          </div>
         </div>
         <div class="row">
           <button id="loginBtn" class="btn">Entrar</button>
         </div>
         <div id="login_msg" class="hidden"></div>
+        <div class="divider"></div>
+        <h2>Cambiar contraseña</h2>
+        <div>
+          <label for="cp_name">Nombre</label>
+          <input id="cp_name" type="text" placeholder="Tu primer nombre exacto">
+        </div>
+        <div>
+          <label for="cp_old">Contraseña actual</label>
+          <input id="cp_old" type="password" maxlength="32">
+          <div class="row" style="margin-top:6px">
+            <button type="button" id="toggleCpOld" class="btn small secondary">Mostrar</button>
+          </div>
+        </div>
+        <div>
+          <label for="cp_new">Nueva contraseña (exactamente 8, letras y números)</label>
+          <input id="cp_new" type="password" maxlength="8" placeholder="8 caracteres">
+          <div class="row" style="margin-top:6px">
+            <button type="button" id="toggleCpNew" class="btn small secondary">Mostrar</button>
+          </div>
+        </div>
+        <div class="row">
+          <button id="changePassBtn" class="btn">Actualizar contraseña</button>
+        </div>
+        <div id="cp_msg" class="hidden"></div>
       </div>
     </div>
 
@@ -385,6 +416,13 @@
       qsa('.card').forEach(hide);
       show(qs(id));
     }
+    function togglePassword(inputId, btnId) {
+      const inp = qs(inputId);
+      const btn = qs(btnId);
+      const isPwd = inp.type === 'password';
+      inp.type = isPwd ? 'text' : 'password';
+      btn.textContent = isPwd ? 'Ocultar' : 'Mostrar';
+    }
     async function handleRegister() {
       clearMsg(qs('#reg_msg'));
       const name = qs('#reg_name').value.trim();
@@ -416,9 +454,9 @@
       }
       const users = getUsers();
       const u = users.find(x => x.name.toLowerCase() === name.toLowerCase());
-      if (!u) return setMsg(qs('#login_msg'), 'Usuario o contraseña inválidos');
+      if (!u) return setMsg(qs('#login_msg'), 'Usuario no encontrado');
       const hash = await sha256(pass);
-      if (hash !== u.passwordHash) return setMsg(qs('#login_msg'), 'Usuario o contraseña inválidos');
+      if (hash !== u.passwordHash) return setMsg(qs('#login_msg'), 'Contraseña incorrecta');
       setSession({ name: u.name, isAdmin: false });
       refreshDiscover();
       showView('#view-discover');
@@ -426,6 +464,27 @@
     function handleLogout() {
       clearSession();
       showView('#view-login');
+    }
+    async function handleChangePassword() {
+      clearMsg(qs('#cp_msg'));
+      const name = qs('#cp_name').value.trim();
+      const oldPass = qs('#cp_old').value.trim();
+      const newPass = qs('#cp_new').value.trim();
+      if (!name || !oldPass || !newPass) return setMsg(qs('#cp_msg'), 'Completa todos los campos');
+      if (!isLettersOnly(name)) return setMsg(qs('#cp_msg'), 'El nombre debe contener solo letras, sin espacios');
+      const allowed = ALLOWED.some(n => n.toLowerCase() === name.toLowerCase());
+      if (!allowed) return setMsg(qs('#cp_msg'), 'El nombre debe coincidir con el listado de participantes');
+      if (!isPasswordValid(newPass)) return setMsg(qs('#cp_msg'), 'La nueva contraseña debe ser exactamente 8 caracteres, letras y números');
+      const users = getUsers();
+      const idx = users.findIndex(u => u.name.toLowerCase() === name.toLowerCase());
+      if (idx === -1) return setMsg(qs('#cp_msg'), 'Usuario no existe');
+      const oldHash = await sha256(oldPass);
+      if (users[idx].passwordHash !== oldHash) return setMsg(qs('#cp_msg'), 'Contraseña actual incorrecta');
+      const newHash = await sha256(newPass);
+      users[idx].passwordHash = newHash;
+      users[idx].updatedAt = nowISO();
+      saveUsers(users);
+      setMsg(qs('#cp_msg'), 'Contraseña actualizada', 'success');
     }
     function refreshAdmin() {
       const users = getUsers();
@@ -537,6 +596,11 @@
       qs('#generateBtn').addEventListener('click', handleGenerate);
       qs('#resetBtn').addEventListener('click', handleReset);
       qs('#fullResetBtn').addEventListener('click', handleFullReset);
+      qs('#toggleRegPass').addEventListener('click', () => togglePassword('#reg_pass', '#toggleRegPass'));
+      qs('#toggleLoginPass').addEventListener('click', () => togglePassword('#login_pass', '#toggleLoginPass'));
+      qs('#toggleCpOld').addEventListener('click', () => togglePassword('#cp_old', '#toggleCpOld'));
+      qs('#toggleCpNew').addEventListener('click', () => togglePassword('#cp_new', '#toggleCpNew'));
+      qs('#changePassBtn').addEventListener('click', handleChangePassword);
       const s = getSession();
       if (!s) showView('#view-login');
       else if (s.isAdmin) { refreshAdmin(); showView('#view-admin'); }
