@@ -356,6 +356,20 @@
     function getSession() { return readJSON(K.session, null); }
     function setSession(s) { writeJSON(K.session, s); }
     function clearSession() { localStorage.removeItem(K.session); }
+    function ensureUsersKey() {
+      const current = getUsers();
+      if (Array.isArray(current) && current.length) return;
+      const keys = Object.keys(localStorage);
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        if (k === K.users) continue;
+        const v = readJSON(k, null);
+        if (Array.isArray(v) && v.length && v.every(x => x && typeof x.name === 'string' && typeof x.passwordHash === 'string')) {
+          saveUsers(v);
+          break;
+        }
+      }
+    }
     function assignmentFor(name) {
       const d = getDraw();
       if (!d) return null;
@@ -584,6 +598,7 @@
       refreshAdmin();
     }
     function boot() {
+      ensureUsersKey();
       qs('#goLoginBtn').addEventListener('click', () => showView('#view-login'));
       qs('#goRegisterBtn').addEventListener('click', () => showView('#view-register'));
       qs('#registerBtn').addEventListener('click', handleRegister);
