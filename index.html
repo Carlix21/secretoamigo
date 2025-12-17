@@ -213,32 +213,9 @@
         </div>
         <div class="row">
           <button id="loginBtn" class="btn">Entrar</button>
+          <button id="goChangePassBtn" class="btn secondary">Cambiar contraseña</button>
         </div>
         <div id="login_msg" class="hidden"></div>
-        <div class="divider"></div>
-        <h2>Cambiar contraseña</h2>
-        <div>
-          <label for="cp_name">Nombre</label>
-          <input id="cp_name" type="text" placeholder="Tu primer nombre exacto">
-        </div>
-        <div>
-          <label for="cp_old">Contraseña actual</label>
-          <input id="cp_old" type="password" maxlength="32">
-          <div class="row" style="margin-top:6px">
-            <button type="button" id="toggleCpOld" class="btn small secondary">Mostrar</button>
-          </div>
-        </div>
-        <div>
-          <label for="cp_new">Nueva contraseña (exactamente 8, letras y números)</label>
-          <input id="cp_new" type="password" maxlength="8" placeholder="8 caracteres">
-          <div class="row" style="margin-top:6px">
-            <button type="button" id="toggleCpNew" class="btn small secondary">Mostrar</button>
-          </div>
-        </div>
-        <div class="row">
-          <button id="changePassBtn" class="btn">Actualizar contraseña</button>
-        </div>
-        <div id="cp_msg" class="hidden"></div>
       </div>
     </div>
 
@@ -256,6 +233,30 @@
           <button id="revealBtn" class="btn">Descubrir</button>
         </div>
         <div id="revealed_info" class="hidden muted"></div>
+      </div>
+    </div>
+
+    <div id="view-change-pass" class="card hidden">
+      <div class="topbar">
+        <h2>Cambiar contraseña</h2>
+        <div class="top-actions"><button class="btn secondary" id="backToLoginBtn">Volver a Login</button></div>
+      </div>
+      <div class="grid">
+        <div>
+          <label for="cp_name">Nombre</label>
+          <input id="cp_name" type="text" placeholder="Tu primer nombre exacto">
+        </div>
+        <div>
+          <label for="cp_new">Nueva contraseña (exactamente 8, letras y números)</label>
+          <input id="cp_new" type="password" maxlength="8" placeholder="8 caracteres">
+          <div class="row" style="margin-top:6px">
+            <button type="button" id="toggleCpNew" class="btn small secondary">Mostrar</button>
+          </div>
+        </div>
+        <div class="row">
+          <button id="changePassBtn" class="btn">Actualizar contraseña</button>
+        </div>
+        <div id="cp_msg" class="hidden"></div>
       </div>
     </div>
 
@@ -468,9 +469,8 @@
     async function handleChangePassword() {
       clearMsg(qs('#cp_msg'));
       const name = qs('#cp_name').value.trim();
-      const oldPass = qs('#cp_old').value.trim();
       const newPass = qs('#cp_new').value.trim();
-      if (!name || !oldPass || !newPass) return setMsg(qs('#cp_msg'), 'Completa todos los campos');
+      if (!name || !newPass) return setMsg(qs('#cp_msg'), 'Completa nombre y nueva contraseña');
       if (!isLettersOnly(name)) return setMsg(qs('#cp_msg'), 'El nombre debe contener solo letras, sin espacios');
       const allowed = ALLOWED.some(n => n.toLowerCase() === name.toLowerCase());
       if (!allowed) return setMsg(qs('#cp_msg'), 'El nombre debe coincidir con el listado de participantes');
@@ -478,8 +478,6 @@
       const users = getUsers();
       const idx = users.findIndex(u => u.name.toLowerCase() === name.toLowerCase());
       if (idx === -1) return setMsg(qs('#cp_msg'), 'Usuario no existe');
-      const oldHash = await sha256(oldPass);
-      if (users[idx].passwordHash !== oldHash) return setMsg(qs('#cp_msg'), 'Contraseña actual incorrecta');
       const newHash = await sha256(newPass);
       users[idx].passwordHash = newHash;
       users[idx].updatedAt = nowISO();
@@ -598,9 +596,10 @@
       qs('#fullResetBtn').addEventListener('click', handleFullReset);
       qs('#toggleRegPass').addEventListener('click', () => togglePassword('#reg_pass', '#toggleRegPass'));
       qs('#toggleLoginPass').addEventListener('click', () => togglePassword('#login_pass', '#toggleLoginPass'));
-      qs('#toggleCpOld').addEventListener('click', () => togglePassword('#cp_old', '#toggleCpOld'));
       qs('#toggleCpNew').addEventListener('click', () => togglePassword('#cp_new', '#toggleCpNew'));
       qs('#changePassBtn').addEventListener('click', handleChangePassword);
+      qs('#goChangePassBtn').addEventListener('click', () => showView('#view-change-pass'));
+      qs('#backToLoginBtn').addEventListener('click', () => showView('#view-login'));
       const s = getSession();
       if (!s) showView('#view-login');
       else if (s.isAdmin) { refreshAdmin(); showView('#view-admin'); }
