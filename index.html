@@ -252,6 +252,7 @@
       <div class="row">
         <button id="generateBtn" class="btn">Generar sorteo</button>
         <button id="resetBtn" class="btn danger">Reset</button>
+        <button id="fullResetBtn" class="btn danger">Reset registros</button>
       </div>
       <div id="admin_msg" class="hidden"></div>
       <div class="divider"></div>
@@ -375,7 +376,7 @@
       const name = qs('#login_name').value.trim();
       const pass = qs('#login_pass').value.trim();
       if (!name || !pass) return setMsg(qs('#login_msg'), 'Completa nombre y contraseña');
-      if (name === 'admin' && pass === 'secreto2025') {
+      if (name === 'admin' && pass === 'sistemas2025') {
         setSession({ name, isAdmin: true });
         refreshAdmin();
         showView('#view-admin');
@@ -477,6 +478,15 @@
       setMsg(qs('#admin_msg'), 'Sorteo y estados reiniciados.', 'success');
       refreshAdmin();
     }
+    function handleFullReset() {
+      clearMsg(qs('#admin_msg'));
+      if (!confirm('¿Borrar todos los registros? Esta acción es irreversible.')) return;
+      saveUsers([]);
+      clearDraw();
+      saveReveals({});
+      setMsg(qs('#admin_msg'), 'Todos los registros, sorteo y revelados borrados.', 'success');
+      refreshAdmin();
+    }
     function boot() {
       qs('#goLoginBtn').addEventListener('click', () => showView('#view-login'));
       qs('#goRegisterBtn').addEventListener('click', () => showView('#view-register'));
@@ -487,6 +497,7 @@
       qs('#revealBtn').addEventListener('click', handleReveal);
       qs('#generateBtn').addEventListener('click', handleGenerate);
       qs('#resetBtn').addEventListener('click', handleReset);
+      qs('#fullResetBtn').addEventListener('click', handleFullReset);
       const s = getSession();
       if (!s) showView('#view-login');
       else if (s.isAdmin) { refreshAdmin(); showView('#view-admin'); }
