@@ -162,7 +162,6 @@
       <div class="logo"></div>
       <div>
         <h1>Amigo Secreto</h1>
-        <h2>LocalStorage • Sin backend</h2>
       </div>
     </div>
 
@@ -173,12 +172,16 @@
       </div>
       <div class="grid">
         <div>
-          <label for="reg_name">Nombre (solo letras, sin espacios)</label>
+          <label for="reg_name">Nombre (primer nombre exacto, sin apellidos)</label>
           <input id="reg_name" type="text" placeholder="Ej: Carlos">
         </div>
         <div>
           <label for="reg_pass">Contraseña (exactamente 8, letras y números)</label>
           <input id="reg_pass" type="password" maxlength="8" placeholder="8 caracteres">
+        </div>
+        <div class="muted">
+          Regístrate con tu primer nombre completo exactamente como aparece. Participantes:
+          Carla, Marcia, Fernanda, Betsy, David, Diego, Carlos, Adrian, Leonardo.
         </div>
         <div class="row">
           <button id="registerBtn" class="btn">Registrarme</button>
@@ -199,12 +202,11 @@
         </div>
         <div>
           <label for="login_pass">Contraseña</label>
-          <input id="login_pass" type="password" maxlength="8">
+          <input id="login_pass" type="password" maxlength="32">
         </div>
         <div class="row">
           <button id="loginBtn" class="btn">Entrar</button>
         </div>
-        <div class="muted">Admin: nombre <code>admin</code> y contraseña <code>12345678</code></div>
         <div id="login_msg" class="hidden"></div>
       </div>
     </div>
@@ -276,6 +278,7 @@
       session: 'sa_session',
       drawMeta: 'sa_draw_meta'
     };
+    const ALLOWED = ['Carla','Marcia','Fernanda','Betsy','David','Diego','Carlos','Adrian','Leonardo'];
     const qs = (s) => document.querySelector(s);
     const qsa = (s) => Array.from(document.querySelectorAll(s));
     const show = (el) => { el.classList.remove('hidden'); };
@@ -356,6 +359,8 @@
       if (!name || !pass) return setMsg(qs('#reg_msg'), 'Completa nombre y contraseña');
       if (!isLettersOnly(name)) return setMsg(qs('#reg_msg'), 'El nombre debe contener solo letras, sin espacios');
       if (!isPasswordValid(pass)) return setMsg(qs('#reg_msg'), 'La contraseña debe ser exactamente 8 caracteres, letras y números');
+      const allowed = ALLOWED.some(n => n.toLowerCase() === name.toLowerCase());
+      if (!allowed) return setMsg(qs('#reg_msg'), 'El nombre debe coincidir con el listado de participantes');
       const users = getUsers();
       const exists = users.some(u => u.name.toLowerCase() === name.toLowerCase());
       if (exists || name.toLowerCase() === 'admin') return setMsg(qs('#reg_msg'), 'El nombre ya existe');
@@ -370,7 +375,7 @@
       const name = qs('#login_name').value.trim();
       const pass = qs('#login_pass').value.trim();
       if (!name || !pass) return setMsg(qs('#login_msg'), 'Completa nombre y contraseña');
-      if (name === 'admin' && pass === '12345678') {
+      if (name === 'admin' && pass === 'secreto2025') {
         setSession({ name, isAdmin: true });
         refreshAdmin();
         showView('#view-admin');
