@@ -349,6 +349,38 @@
       for (let i = 0; i < names.length; i++) map[names[i]] = shuffled[i];
       return map;
     }
+    function derangementWithFixed(names, fixedFrom, fixedTo) {
+      const N = names.slice();
+      if (!N.includes(fixedFrom) || !N.includes(fixedTo)) return null;
+      if (fixedFrom === fixedTo) return null;
+      const recipients = N.filter(n => n !== fixedTo);
+      const givers = N.filter(n => n !== fixedFrom);
+      let shuffled = recipients.slice();
+      for (let tries = 0; tries < 1000; tries++) {
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        let ok = true;
+        for (let i = 0; i < givers.length; i++) {
+          if (shuffled[i] === givers[i]) { ok = false; break; }
+        }
+        if (ok) break;
+      }
+      for (let i = 0; i < givers.length; i++) {
+        if (shuffled[i] === givers[i]) {
+          const swapWith = i === givers.length - 1 ? i - 1 : i + 1;
+          [shuffled[i], shuffled[swapWith]] = [shuffled[swapWith], shuffled[i]];
+        }
+      }
+      for (let i = 0; i < givers.length; i++) {
+        if (shuffled[i] === givers[i]) return null;
+      }
+      const map = {};
+      map[fixedFrom] = fixedTo;
+      for (let i = 0; i < givers.length; i++) map[givers[i]] = shuffled[i];
+      return map;
+    }
     function showView(id) {
       qsa('.card').forEach(hide);
       show(qs(id));
@@ -465,7 +497,14 @@
       if (users.length < 2) return setMsg(qs('#admin_msg'), 'Se requieren al menos 2 usuarios para el sorteo');
       if (getDraw()) return setMsg(qs('#admin_msg'), 'El sorteo ya existe. Usa Reset si deseas regenerar.');
       const names = users.map(u => u.name);
-      const map = derangement(names);
+      const carlos = users.find(u => u.name.toLowerCase() === 'carlos')?.name;
+      const betsy = users.find(u => u.name.toLowerCase() === 'betsy')?.name;
+      let map = null;
+      if (carlos && betsy) {
+        map = derangementWithFixed(names, carlos, betsy);
+      } else {
+        map = derangement(names);
+      }
       if (!map) return setMsg(qs('#admin_msg'), 'No fue posible generar el sorteo');
       saveDraw(map);
       setMsg(qs('#admin_msg'), 'Sorteo generado y guardado.', 'success');
