@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amigo Secreto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b1b2b;
+      --panel: #12263a;
+      --panel-2: #17324b;
+      --text: #e8f0fe;
+      --muted: #a9c1d9;
+      --accent: #3ebd93;
+      --accent-2: #5dd6b3;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+      --primary: #60a5fa;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #081423 0%, #0c2238 100%);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .card {
+      background: radial-gradient(1200px 300px at 0% 0%, #132a42 0%, #0e2034 100%);
+      border: 1px solid #244869;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .brand .logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #3ebd93, #60a5fa);
+      box-shadow: 0 8px 18px rgba(96,165,250,0.35);
+    }
+    h1, h2 {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    h2 { font-size: 18px; color: var(--muted); font-weight: 600; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 820px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #2a4a66;
+      background: var(--panel);
+      color: var(--text);
+      outline: none;
+    }
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.18);
+    }
+    .row { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #06233a;
+      background: var(--accent);
+      box-shadow: 0 8px 16px rgba(62,189,147,0.25);
+    }
+    .btn:hover { background: var(--accent-2); }
+    .btn.secondary {
+      background: var(--primary);
+      color: #0b1b2b;
+      box-shadow: 0 8px 16px rgba(96,165,250,0.25);
+    }
+    .btn.danger {
+      background: var(--danger);
+      color: #fff;
+      box-shadow: 0 8px 16px rgba(239,68,68,0.25);
+    }
+    .btn.warn {
+      background: var(--warn);
+      color: #111827;
+      box-shadow: 0 8px 16px rgba(245,158,11,0.25);
+    }
+    .muted { color: var(--muted); font-size: 13px; }
+    .error { color: #fecaca; background: #2e1b1b; border: 1px solid #7f1d1d; padding: 10px 12px; border-radius: 10px; }
+    .success { color: #dcfce7; background: #0f2b1f; border: 1px solid #065f46; padding: 10px 12px; border-radius: 10px; }
+    .divider { height: 1px; background: #234861; margin: 14px 0; }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .table th, .table td {
+      border-bottom: 1px solid #21445e;
+      padding: 10px 8px;
+      text-align: left;
+      font-size: 14px;
+    }
+    .hidden { display: none; }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .top-actions { display: flex; gap: 10px; }
+    .kpi {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 10px 0 16px;
+    }
+    .kpi .card { padding: 12px; }
+    .kpi h3 { margin: 0; font-size: 13px; color: var(--muted); font-weight: 600; }
+    .kpi .val { font-size: 18px; font-weight: 700; color: var(--text); }
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid #2a4a66;
+      color: var(--muted);
+      background: var(--panel);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>Amigo Secreto</h1>
+        <h2>LocalStorage • Sin backend</h2>
+      </div>
+    </div>
+
+    <div id="view-register" class="card hidden">
+      <div class="topbar">
+        <h2>Registro</h2>
+        <div class="top-actions"><button class="btn secondary" id="goLoginBtn">Ir a Login</button></div>
+      </div>
+      <div class="grid">
+        <div>
+          <label for="reg_name">Nombre (solo letras, sin espacios)</label>
+          <input id="reg_name" type="text" placeholder="Ej: Carlos">
+        </div>
+        <div>
+          <label for="reg_pass">Contraseña (exactamente 8, letras y números)</label>
+          <input id="reg_pass" type="password" maxlength="8" placeholder="8 caracteres">
+        </div>
+        <div class="row">
+          <button id="registerBtn" class="btn">Registrarme</button>
+        </div>
+        <div id="reg_msg" class="hidden"></div>
+      </div>
+    </div>
+
+    <div id="view-login" class="card hidden">
+      <div class="topbar">
+        <h2>Login</h2>
+        <div class="top-actions"><button class="btn secondary" id="goRegisterBtn">Ir a Registro</button></div>
+      </div>
+      <div class="grid">
+        <div>
+          <label for="login_name">Nombre</label>
+          <input id="login_name" type="text" placeholder="Ej: Carlos">
+        </div>
+        <div>
+          <label for="login_pass">Contraseña</label>
+          <input id="login_pass" type="password" maxlength="8">
+        </div>
+        <div class="row">
+          <button id="loginBtn" class="btn">Entrar</button>
+        </div>
+        <div class="muted">Admin: nombre <code>admin</code> y contraseña <code>12345678</code></div>
+        <div id="login_msg" class="hidden"></div>
+      </div>
+    </div>
+
+    <div id="view-discover" class="card hidden">
+      <div class="topbar">
+        <h2>Descubre tu Amigo Secreto</h2>
+        <div class="top-actions">
+          <button id="logoutBtn1" class="btn warn">Salir</button>
+        </div>
+      </div>
+      <div class="grid">
+        <div id="discover_greeting" class="success hidden"></div>
+        <div id="discover_msg" class="hidden"></div>
+        <div class="row">
+          <button id="revealBtn" class="btn">Descubrir</button>
+        </div>
+        <div id="revealed_info" class="hidden muted"></div>
+      </div>
+    </div>
+
+    <div id="view-admin" class="card hidden">
+      <div class="topbar">
+        <h2>Admin</h2>
+        <div class="top-actions">
+          <button id="logoutBtn2" class="btn warn">Salir</button>
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="card">
+          <h3>Usuarios</h3>
+          <div class="val" id="kpi_users">0</div>
+        </div>
+        <div class="card">
+          <h3>Revelados</h3>
+          <div class="val" id="kpi_revealed">0</div>
+        </div>
+        <div class="card">
+          <h3>Sorteo</h3>
+          <div id="kpi_draw" class="val pill">Sin sorteo</div>
+        </div>
+      </div>
+      <div class="row">
+        <button id="generateBtn" class="btn">Generar sorteo</button>
+        <button id="resetBtn" class="btn danger">Reset</button>
+      </div>
+      <div id="admin_msg" class="hidden"></div>
+      <div class="divider"></div>
+      <h2>Usuarios</h2>
+      <table class="table" id="users_table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Revelado</th>
+            <th>Fecha/Hora</th>
+            <th>Asignado</th>
+          </tr>
+        </thead>
+        <tbody id="users_tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const K = {
+      users: 'sa_users',
+      draw: 'sa_draw',
+      reveals: 'sa_reveals',
+      session: 'sa_session',
+      drawMeta: 'sa_draw_meta'
+    };
+    const qs = (s) => document.querySelector(s);
+    const qsa = (s) => Array.from(document.querySelectorAll(s));
+    const show = (el) => { el.classList.remove('hidden'); };
+    const hide = (el) => { el.classList.add('hidden'); };
+    const setMsg = (el, text, type='error') => {
+      el.className = type === 'success' ? 'success' : 'error';
+      el.textContent = text;
+      show(el);
+    };
+    const clearMsg = (el) => { el.textContent = ''; el.className = 'hidden'; };
+    const isLettersOnly = (s) => /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+$/.test(s);
+    const isPasswordValid = (s) => /^[A-Za-z0-9]{8}$/.test(s);
+    const readJSON = (k, d) => {
+      const v = localStorage.getItem(k);
+      if (!v) return d;
+      try { return JSON.parse(v); } catch { return d; }
+    };
+    const writeJSON = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+    const nowISO = () => new Date().toISOString();
+    async function sha256(str) {
+      const enc = new TextEncoder().encode(str);
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      const arr = Array.from(new Uint8Array(buf));
+      return arr.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    function getUsers() { return readJSON(K.users, []); }
+    function saveUsers(u) { writeJSON(K.users, u); }
+    function getDraw() { return readJSON(K.draw, null); }
+    function saveDraw(d) { writeJSON(K.draw, d); writeJSON(K.drawMeta, { generatedAt: nowISO() }); }
+    function clearDraw() { localStorage.removeItem(K.draw); localStorage.removeItem(K.drawMeta); }
+    function getReveals() { return readJSON(K.reveals, {}); }
+    function saveReveals(r) { writeJSON(K.reveals, r); }
+    function setReveal(name) {
+      const r = getReveals();
+      r[name] = { revealed: true, revealedAt: nowISO() };
+      saveReveals(r);
+    }
+    function getReveal(name) {
+      const r = getReveals();
+      return r[name] || { revealed: false, revealedAt: null };
+    }
+    function getSession() { return readJSON(K.session, null); }
+    function setSession(s) { writeJSON(K.session, s); }
+    function clearSession() { localStorage.removeItem(K.session); }
+    function assignmentFor(name) {
+      const d = getDraw();
+      if (!d) return null;
+      return d[name] || null;
+    }
+    function derangement(names) {
+      if (names.length < 2) return null;
+      let shuffled = names.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      for (let i = 0; i < names.length; i++) {
+        if (shuffled[i] === names[i]) {
+          const swapWith = i === names.length - 1 ? i - 1 : i + 1;
+          [shuffled[i], shuffled[swapWith]] = [shuffled[swapWith], shuffled[i]];
+        }
+      }
+      for (let i = 0; i < names.length; i++) {
+        if (shuffled[i] === names[i]) return derangement(names);
+      }
+      const map = {};
+      for (let i = 0; i < names.length; i++) map[names[i]] = shuffled[i];
+      return map;
+    }
+    function showView(id) {
+      qsa('.card').forEach(hide);
+      show(qs(id));
+    }
+    async function handleRegister() {
+      clearMsg(qs('#reg_msg'));
+      const name = qs('#reg_name').value.trim();
+      const pass = qs('#reg_pass').value.trim();
+      if (!name || !pass) return setMsg(qs('#reg_msg'), 'Completa nombre y contraseña');
+      if (!isLettersOnly(name)) return setMsg(qs('#reg_msg'), 'El nombre debe contener solo letras, sin espacios');
+      if (!isPasswordValid(pass)) return setMsg(qs('#reg_msg'), 'La contraseña debe ser exactamente 8 caracteres, letras y números');
+      const users = getUsers();
+      const exists = users.some(u => u.name.toLowerCase() === name.toLowerCase());
+      if (exists || name.toLowerCase() === 'admin') return setMsg(qs('#reg_msg'), 'El nombre ya existe');
+      const hash = await sha256(pass);
+      users.push({ name, passwordHash: hash, createdAt: nowISO() });
+      saveUsers(users);
+      setMsg(qs('#reg_msg'), 'Registro exitoso. Ahora inicia sesión.', 'success');
+      setTimeout(() => showView('#view-login'), 700);
+    }
+    async function handleLogin() {
+      clearMsg(qs('#login_msg'));
+      const name = qs('#login_name').value.trim();
+      const pass = qs('#login_pass').value.trim();
+      if (!name || !pass) return setMsg(qs('#login_msg'), 'Completa nombre y contraseña');
+      if (name === 'admin' && pass === '12345678') {
+        setSession({ name, isAdmin: true });
+        refreshAdmin();
+        showView('#view-admin');
+        return;
+      }
+      const users = getUsers();
+      const u = users.find(x => x.name.toLowerCase() === name.toLowerCase());
+      if (!u) return setMsg(qs('#login_msg'), 'Usuario o contraseña inválidos');
+      const hash = await sha256(pass);
+      if (hash !== u.passwordHash) return setMsg(qs('#login_msg'), 'Usuario o contraseña inválidos');
+      setSession({ name: u.name, isAdmin: false });
+      refreshDiscover();
+      showView('#view-discover');
+    }
+    function handleLogout() {
+      clearSession();
+      showView('#view-login');
+    }
+    function refreshAdmin() {
+      const users = getUsers();
+      const reveals = getReveals();
+      const draw = getDraw();
+      qs('#kpi_users').textContent = users.length.toString();
+      const revealedCount = Object.values(reveals).filter(r => r.revealed).length;
+      qs('#kpi_revealed').textContent = revealedCount.toString();
+      const meta = readJSON(K.drawMeta, null);
+      if (draw && meta) {
+        qs('#kpi_draw').textContent = 'Generado';
+        qs('#kpi_draw').className = 'val pill';
+      } else {
+        qs('#kpi_draw').textContent = 'Sin sorteo';
+        qs('#kpi_draw').className = 'val pill';
+      }
+      const tbody = qs('#users_tbody');
+      tbody.innerHTML = '';
+      users.forEach(u => {
+        const r = reveals[u.name] || { revealed: false, revealedAt: '' };
+        const assigned = draw ? (draw[u.name] || '') : '';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${u.name}</td>
+          <td>${r.revealed ? 'Sí' : 'No'}</td>
+          <td>${r.revealedAt ? new Date(r.revealedAt).toLocaleString() : ''}</td>
+          <td>${assigned}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      qs('#generateBtn').disabled = !!draw;
+    }
+    function refreshDiscover() {
+      clearMsg(qs('#discover_msg'));
+      hide(qs('#discover_greeting'));
+      hide(qs('#revealed_info'));
+      const s = getSession();
+      if (!s || s.isAdmin) return;
+      const name = s.name;
+      const d = getDraw();
+      if (!d) {
+        return setMsg(qs('#discover_msg'), 'Aún no se generó el sorteo. Intenta más tarde.');
+      }
+      const r = getReveal(name);
+      if (r.revealed) {
+        const assigned = assignmentFor(name);
+        qs('#discover_greeting').textContent = `Hola ${name}, tu amigo secreto es ${assigned}`;
+        show(qs('#discover_greeting'));
+        qs('#revealed_info').textContent = `Revelado el ${new Date(r.revealedAt).toLocaleString()}`;
+        show(qs('#revealed_info'));
+      }
+    }
+    function handleReveal() {
+      const s = getSession();
+      if (!s || s.isAdmin) return;
+      const name = s.name;
+      const assigned = assignmentFor(name);
+      if (!assigned) return setMsg(qs('#discover_msg'), 'Aún no se generó el sorteo.');
+      setReveal(name);
+      qs('#discover_greeting').textContent = `Hola ${name}, tu amigo secreto es ${assigned}`;
+      show(qs('#discover_greeting'));
+      const r = getReveal(name);
+      qs('#revealed_info').textContent = `Revelado el ${new Date(r.revealedAt).toLocaleString()}`;
+      show(qs('#revealed_info'));
+    }
+    function handleGenerate() {
+      clearMsg(qs('#admin_msg'));
+      const users = getUsers();
+      if (users.length < 2) return setMsg(qs('#admin_msg'), 'Se requieren al menos 2 usuarios para el sorteo');
+      if (getDraw()) return setMsg(qs('#admin_msg'), 'El sorteo ya existe. Usa Reset si deseas regenerar.');
+      const names = users.map(u => u.name);
+      const map = derangement(names);
+      if (!map) return setMsg(qs('#admin_msg'), 'No fue posible generar el sorteo');
+      saveDraw(map);
+      setMsg(qs('#admin_msg'), 'Sorteo generado y guardado.', 'success');
+      refreshAdmin();
+    }
+    function handleReset() {
+      clearMsg(qs('#admin_msg'));
+      clearDraw();
+      saveReveals({});
+      setMsg(qs('#admin_msg'), 'Sorteo y estados reiniciados.', 'success');
+      refreshAdmin();
+    }
+    function boot() {
+      qs('#goLoginBtn').addEventListener('click', () => showView('#view-login'));
+      qs('#goRegisterBtn').addEventListener('click', () => showView('#view-register'));
+      qs('#registerBtn').addEventListener('click', handleRegister);
+      qs('#loginBtn').addEventListener('click', handleLogin);
+      qs('#logoutBtn1').addEventListener('click', handleLogout);
+      qs('#logoutBtn2').addEventListener('click', handleLogout);
+      qs('#revealBtn').addEventListener('click', handleReveal);
+      qs('#generateBtn').addEventListener('click', handleGenerate);
+      qs('#resetBtn').addEventListener('click', handleReset);
+      const s = getSession();
+      if (!s) showView('#view-login');
+      else if (s.isAdmin) { refreshAdmin(); showView('#view-admin'); }
+      else { refreshDiscover(); showView('#view-discover'); }
+    }
+    document.addEventListener('DOMContentLoaded', boot);
+  </script>
+</body>
+</html>
