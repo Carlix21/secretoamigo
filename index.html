@@ -3,763 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amigo Secreto</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Amigo Secreto · Envío por correo</title>
   <style>
-    :root {
-      --bg: #0b1b2b;
-      --panel: #12263a;
-      --panel-2: #17324b;
-      --text: #e8f0fe;
-      --muted: #a9c1d9;
-      --accent: #3ebd93;
-      --accent-2: #5dd6b3;
-      --danger: #ef4444;
-      --warn: #f59e0b;
-      --primary: #60a5fa;
-    }
+    :root { --bg:#0b1b2b; --panel:#12263a; --text:#e8f0fe; --muted:#a9c1d9; --accent:#3ebd93; --danger:#ef4444; }
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(180deg, #081423 0%, #0c2238 100%);
-      color: var(--text);
-    }
-    .wrap {
-      max-width: 920px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-    .card {
-      background: radial-gradient(1200px 300px at 0% 0%, #132a42 0%, #0e2034 100%);
-      border: 1px solid #244869;
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .brand .logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #3ebd93, #60a5fa);
-      box-shadow: 0 8px 18px rgba(96,165,250,0.35);
-    }
-    h1, h2 {
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-    }
-    h2 { font-size: 18px; color: var(--muted); font-weight: 600; }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    @media (min-width: 820px) {
-      .grid-2 { grid-template-columns: 1fr 1fr; }
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-    input, select {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid #2a4a66;
-      background: var(--panel);
-      color: var(--text);
-      outline: none;
-    }
-    input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(96,165,250,0.18);
-    }
-    .row { display: flex; gap: 10px; align-items: center; }
-    .btn {
-      appearance: none;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-weight: 600;
-      cursor: pointer;
-      color: #06233a;
-      background: var(--accent);
-      box-shadow: 0 8px 16px rgba(62,189,147,0.25);
-    }
-    .btn:hover { background: var(--accent-2); }
-    .btn.secondary {
-      background: var(--primary);
-      color: #0b1b2b;
-      box-shadow: 0 8px 16px rgba(96,165,250,0.25);
-    }
-    .btn.danger {
-      background: var(--danger);
-      color: #fff;
-      box-shadow: 0 8px 16px rgba(239,68,68,0.25);
-    }
-    .btn.warn {
-      background: var(--warn);
-      color: #111827;
-      box-shadow: 0 8px 16px rgba(245,158,11,0.25);
-    }
-    .btn.small { padding: 8px 10px; font-size: 12px; }
-    .muted { color: var(--muted); font-size: 13px; }
-    .error { color: #fecaca; background: #2e1b1b; border: 1px solid #7f1d1d; padding: 10px 12px; border-radius: 10px; }
-    .success { color: #dcfce7; background: #0f2b1f; border: 1px solid #065f46; padding: 10px 12px; border-radius: 10px; }
-    .divider { height: 1px; background: #234861; margin: 14px 0; }
-    .table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .table th, .table td {
-      border-bottom: 1px solid #21445e;
-      padding: 10px 8px;
-      text-align: left;
-      font-size: 14px;
-    }
-    .hidden { display: none; }
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .top-actions { display: flex; gap: 10px; }
-    .kpi {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin: 10px 0 16px;
-    }
-    .kpi .card { padding: 12px; }
-    .kpi h3 { margin: 0; font-size: 13px; color: var(--muted); font-weight: 600; }
-    .kpi .val { font-size: 18px; font-weight: 700; color: var(--text); }
-    .pill {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      border: 1px solid #2a4a66;
-      color: var(--muted);
-      background: var(--panel);
-    }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#0c2238; color:var(--text); }
+    .wrap { max-width:960px; margin:0 auto; padding:24px; }
+    .card { background:var(--panel); border:1px solid #244869; border-radius:12px; padding:18px; }
+    h1,h2 { margin:0 0 12px 0; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn { border:none; border-radius:10px; padding:12px 16px; font-weight:600; cursor:pointer; color:#06233a; background:var(--accent); }
+    .btn.danger { background:var(--danger); color:#fff; }
+    .table { width:100%; border-collapse:collapse; margin-top:12px; }
+    .table th,.table td { border-bottom:1px solid #21445e; padding:8px; text-align:left; font-size:14px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .error { color:#fecaca; background:#2e1b1b; border:1px solid #7f1d1d; padding:10px 12px; border-radius:10px; margin-top:10px; }
+    .success { color:#dcfce7; background:#0f2b1f; border:1px solid #065f46; padding:10px 12px; border-radius:10px; margin-top:10px; }
+    .hidden { display:none; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="brand">
-      <div class="logo"></div>
-      <div>
-        <h1>Amigo Secreto</h1>
-      </div>
-    </div>
-
-    <div id="view-register" class="card hidden">
-      <div class="topbar">
-        <h2>Registro</h2>
-        <div class="top-actions"><button class="btn secondary" id="goLoginBtn">Ir a Login</button></div>
-      </div>
-      <div class="grid">
-        <div>
-          <label for="reg_name">Nombre (primer nombre exacto, sin apellidos)</label>
-          <input id="reg_name" type="text" placeholder="Ej: Carlos">
-        </div>
-        <div>
-          <label for="reg_pass">Contraseña (exactamente 8, letras y números)</label>
-          <input id="reg_pass" type="password" maxlength="8" placeholder="8 caracteres">
-          <div class="row" style="margin-top:6px">
-            <button type="button" id="toggleRegPass" class="btn small secondary">Mostrar</button>
-          </div>
-        </div>
-        <div class="muted">
-          Regístrate con tu primer nombre completo exactamente como aparece. Participantes:
-          Carla, Marcia, Fernanda, Betsy, David, Diego, Carlos, Adrian, Leonardo.
-        </div>
-        <div class="row">
-          <button id="registerBtn" class="btn">Registrarme</button>
-        </div>
-        <div id="reg_msg" class="hidden"></div>
-      </div>
-    </div>
-
-    <div id="view-login" class="card hidden">
-      <div class="topbar">
-        <h2>Login</h2>
-        <div class="top-actions"><button class="btn secondary" id="goRegisterBtn">Ir a Registro</button></div>
-      </div>
-      <div class="grid">
-        <div>
-          <label for="login_name">Nombre</label>
-          <input id="login_name" type="text" placeholder="Ej: Carlos">
-        </div>
-        <div>
-          <label for="login_pass">Contraseña</label>
-          <input id="login_pass" type="password" maxlength="32">
-          <div class="row" style="margin-top:6px">
-            <button type="button" id="toggleLoginPass" class="btn small secondary">Mostrar</button>
-          </div>
-        </div>
-        <div class="row">
-          <button id="loginBtn" class="btn">Entrar</button>
-          <button id="goChangePassBtn" class="btn secondary">Cambiar contraseña</button>
-        </div>
-        <div id="login_msg" class="hidden"></div>
-      </div>
-    </div>
-
-    <div id="view-discover" class="card hidden">
-      <div class="topbar">
-        <h2>Descubre tu Amigo Secreto</h2>
-        <div class="top-actions">
-          <button id="logoutBtn1" class="btn warn">Salir</button>
-        </div>
-      </div>
-      <div class="grid">
-        <div id="discover_greeting" class="success hidden"></div>
-        <div id="discover_msg" class="hidden"></div>
-        <div class="row">
-          <button id="revealBtn" class="btn">Descubrir</button>
-        </div>
-        <div id="revealed_info" class="hidden muted"></div>
-      </div>
-    </div>
-
-    <div id="view-change-pass" class="card hidden">
-      <div class="topbar">
-        <h2>Cambiar contraseña</h2>
-        <div class="top-actions"><button class="btn secondary" id="backToLoginBtn">Volver a Login</button></div>
-      </div>
-      <div class="grid">
-        <div>
-          <label for="cp_name">Nombre</label>
-          <input id="cp_name" type="text" placeholder="Tu primer nombre exacto">
-        </div>
-        <div>
-          <label for="cp_new">Nueva contraseña (exactamente 8, letras y números)</label>
-          <input id="cp_new" type="password" maxlength="8" placeholder="8 caracteres">
-          <div class="row" style="margin-top:6px">
-            <button type="button" id="toggleCpNew" class="btn small secondary">Mostrar</button>
-          </div>
-        </div>
-        <div class="row">
-          <button id="changePassBtn" class="btn">Actualizar contraseña</button>
-        </div>
-        <div id="cp_msg" class="hidden"></div>
-      </div>
-    </div>
-
-    <div id="view-admin" class="card hidden">
-      <div class="topbar">
-        <h2>Admin</h2>
-        <div class="top-actions">
-          <button id="logoutBtn2" class="btn warn">Salir</button>
-        </div>
-      </div>
-      <div class="kpi">
-        <div class="card">
-          <h3>Usuarios</h3>
-          <div class="val" id="kpi_users">0</div>
-        </div>
-        <div class="card">
-          <h3>Revelados</h3>
-          <div class="val" id="kpi_revealed">0</div>
-        </div>
-        <div class="card">
-          <h3>Sorteo</h3>
-          <div id="kpi_draw" class="val pill">Sin sorteo</div>
-        </div>
-      </div>
-      <div class="row">
+    <div class="card">
+      <h1>Amigo Secreto</h1>
+      <div class="muted">Genera el sorteo con la regla Carlos → Betsy y envía por correo a cada participante su amigo secreto.</div>
+      <div class="row" style="margin-top:12px">
         <button id="generateBtn" class="btn">Generar sorteo</button>
+        <button id="sendBtn" class="btn">Enviar correos</button>
         <button id="resetBtn" class="btn danger">Reset</button>
-        <button id="fullResetBtn" class="btn danger">Reset registros</button>
-        <button id="importBtn" class="btn secondary">Importar usuarios</button>
-        <button id="exportBtn" class="btn secondary">Exportar usuarios</button>
-        <button id="clearStorageBtn" class="btn danger">Limpiar todo</button>
       </div>
-      <div id="admin_msg" class="hidden"></div>
-      <div class="divider"></div>
-      <h2>Usuarios</h2>
-      <table class="table" id="users_table">
+      <div id="msg" class="hidden"></div>
+      <table class="table">
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Revelado</th>
-            <th>Fecha/Hora</th>
+            <th>Correo</th>
             <th>Asignado</th>
+            <th>Estado envío</th>
           </tr>
         </thead>
-        <tbody id="users_tbody"></tbody>
+        <tbody id="tbody"></tbody>
       </table>
-      <div id="import_panel" class="card hidden" style="margin-top:12px">
-        <h2>Importar usuarios</h2>
-        <div class="grid">
-          <div>
-            <label for="import_text">Pega aquí el JSON de usuarios</label>
-            <textarea id="import_text" rows="6" style="width:100%;"></textarea>
-          </div>
-          <div class="row">
-            <button id="doImportBtn" class="btn">Procesar importación</button>
-            <button id="cancelImportBtn" class="btn secondary">Cancelar</button>
-          </div>
-        </div>
-      </div>
-      <div id="export_panel" class="card hidden" style="margin-top:12px">
-        <h2>Exportar usuarios</h2>
-        <div class="grid">
-          <div>
-            <label for="export_text">Copia este JSON y compártelo</label>
-            <textarea id="export_text" rows="6" style="width:100%;" readonly></textarea>
-          </div>
-          <div class="row">
-            <button id="closeExportBtn" class="btn secondary">Cerrar</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
-
   <script>
-    const K = {
-      users: 'sa_users',
-      draw: 'sa_draw',
-      reveals: 'sa_reveals',
-      session: 'sa_session',
-      drawMeta: 'sa_draw_meta',
-      migrateDisabled: 'sa_migrate_disabled'
-    };
-    const ALLOWED = ['Carla','Marcia','Fernanda','Betsy','David','Diego','Carlos','Adrian','Leonardo'];
-    const qs = (s) => document.querySelector(s);
-    const qsa = (s) => Array.from(document.querySelectorAll(s));
-    const show = (el) => { el.classList.remove('hidden'); };
-    const hide = (el) => { el.classList.add('hidden'); };
-    const setMsg = (el, text, type='error') => {
-      el.className = type === 'success' ? 'success' : 'error';
-      el.textContent = text;
-      show(el);
-    };
-    const clearMsg = (el) => { el.textContent = ''; el.className = 'hidden'; };
-    const isLettersOnly = (s) => /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+$/.test(s);
-    const isPasswordValid = (s) => /^[A-Za-z0-9]{8}$/.test(s);
-    const readJSON = (k, d) => {
-      const v = localStorage.getItem(k);
-      if (!v) return d;
-      try { return JSON.parse(v); } catch { return d; }
-    };
-    const writeJSON = (k, v) => localStorage.setItem(k, JSON.stringify(v));
-    const nowISO = () => new Date().toISOString();
-    async function sha256(str) {
-      const enc = new TextEncoder().encode(str);
-      const buf = await crypto.subtle.digest('SHA-256', enc);
-      const arr = Array.from(new Uint8Array(buf));
-      return arr.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-    function getUsers() { return readJSON(K.users, []); }
-    function saveUsers(u) { writeJSON(K.users, u); }
-    function getDraw() { return readJSON(K.draw, null); }
-    function saveDraw(d) { writeJSON(K.draw, d); writeJSON(K.drawMeta, { generatedAt: nowISO() }); }
-    function clearDraw() { localStorage.removeItem(K.draw); localStorage.removeItem(K.drawMeta); }
-    function getReveals() { return readJSON(K.reveals, {}); }
-    function saveReveals(r) { writeJSON(K.reveals, r); }
-    function setReveal(name) {
-      const r = getReveals();
-      r[name] = { revealed: true, revealedAt: nowISO() };
-      saveReveals(r);
-    }
-    function getReveal(name) {
-      const r = getReveals();
-      return r[name] || { revealed: false, revealedAt: null };
-    }
-    function getSession() { return readJSON(K.session, null); }
-    function setSession(s) { writeJSON(K.session, s); }
-    function clearSession() { localStorage.removeItem(K.session); }
-    const isHex64 = (s) => typeof s === 'string' && /^[0-9a-fA-F]{64}$/.test(s);
-    const isAllowedName = (n) => ALLOWED.some(a => a.toLowerCase() === String(n).toLowerCase());
-    async function normalizeUsers(raw) {
-      if (!raw) return [];
-      const out = [];
-      if (Array.isArray(raw)) {
-        for (let i = 0; i < raw.length; i++) {
-          const x = raw[i];
-          if (x && typeof x === 'object' && typeof x.name === 'string' && isAllowedName(x.name) && isLettersOnly(x.name)) {
-            if (typeof x.passwordHash === 'string' && x.passwordHash) {
-              out.push({ name: x.name, passwordHash: x.passwordHash, createdAt: x.createdAt || nowISO(), updatedAt: nowISO() });
-            } else if (typeof x.password === 'string' && x.password) {
-              const h = await sha256(x.password);
-              out.push({ name: x.name, passwordHash: h, createdAt: x.createdAt || nowISO(), updatedAt: nowISO() });
-            } else if (typeof x.pass === 'string' && x.pass) {
-              const h = await sha256(x.pass);
-              out.push({ name: x.name, passwordHash: h, createdAt: x.createdAt || nowISO(), updatedAt: nowISO() });
-            }
-          }
-        }
-      } else if (typeof raw === 'object') {
-        const entries = Object.entries(raw);
-        for (let i = 0; i < entries.length; i++) {
-          const [name, val] = entries[i];
-          if (typeof name !== 'string' || !isAllowedName(name) || !isLettersOnly(name)) continue;
-          if (typeof val === 'string' && val) {
-            const h = isHex64(val) ? val : await sha256(val);
-            out.push({ name, passwordHash: h, createdAt: nowISO(), updatedAt: nowISO() });
-          } else if (val && typeof val === 'object') {
-            if (typeof val.passwordHash === 'string' && val.passwordHash) {
-              out.push({ name: val.name || name, passwordHash: val.passwordHash, createdAt: val.createdAt || nowISO(), updatedAt: nowISO() });
-            } else if (typeof val.password === 'string' && val.password) {
-              const h = await sha256(val.password);
-              out.push({ name: val.name || name, passwordHash: h, createdAt: val.createdAt || nowISO(), updatedAt: nowISO() });
-            } else if (typeof val.pass === 'string' && val.pass) {
-              const h = await sha256(val.pass);
-              out.push({ name: val.name || name, passwordHash: h, createdAt: val.createdAt || nowISO(), updatedAt: nowISO() });
-            }
-          }
-        }
-      }
-      const byName = new Map();
-      for (let i = 0; i < out.length; i++) {
-        const u = out[i];
-        if (!u || !u.name || !u.passwordHash) continue;
-        byName.set(u.name.toLowerCase(), u);
-      }
-      return Array.from(byName.values());
-    }
-    async function ensureUsersKey() {
-      if (readJSON(K.migrateDisabled, false)) return;
-      const current = getUsers();
-      if (Array.isArray(current) && current.length) return;
-      const keys = Object.keys(localStorage);
-      for (let i = 0; i < keys.length; i++) {
-        const k = keys[i];
-        if (k === K.users) continue;
-        const v = readJSON(k, null);
-        const norm = await normalizeUsers(v);
-        if (norm.length && norm.every(u => isAllowedName(u.name))) { saveUsers(norm); break; }
-      }
-    }
-    function assignmentFor(name) {
-      const d = getDraw();
-      if (!d) return null;
-      return d[name] || null;
-    }
-    function derangement(names) {
-      if (names.length < 2) return null;
-      let shuffled = names.slice();
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      for (let i = 0; i < names.length; i++) {
-        if (shuffled[i] === names[i]) {
-          const swapWith = i === names.length - 1 ? i - 1 : i + 1;
-          [shuffled[i], shuffled[swapWith]] = [shuffled[swapWith], shuffled[i]];
-        }
-      }
-      for (let i = 0; i < names.length; i++) {
-        if (shuffled[i] === names[i]) return derangement(names);
-      }
-      const map = {};
-      for (let i = 0; i < names.length; i++) map[names[i]] = shuffled[i];
-      return map;
-    }
+    const SERVER_EMAIL_URL = 'http://192.168.246.110:8088/email/enviar-correo';
+    const K = { draw: 'as_draw', sent: 'as_sent' };
+    const people = [
+      { name:'Fernanda', email:'mayerlijama2@gmail.com' },
+      { name:'David', email:'david_velasquez0801@hotmail.com' },
+      { name:'Carla', email:'cmcm8c@gmail.com' },
+      { name:'Marcia', email:'marcyanee84@hotmail.com' },
+      { name:'Betsy', email:'betojca@hotmail.com' },
+      { name:'Carlos', email:'carlosaballadarese@gmail.com' },
+      { name:'Diego', email:'diego.j.n.pillalaza@hotmail.es' },
+      { name:'Adrian', email:'adriano.24c@gmail.com' },
+      { name:'Leonardo', email:'lsanchez@manamer.com' },
+    ];
+    const qs = s => document.querySelector(s);
+    const show = el => el.classList.remove('hidden');
+    const hide = el => el.classList.add('hidden');
+    const setMsg = (t, type='error') => { const el = qs('#msg'); el.className = type==='success'?'success':'error'; el.textContent = t; show(el); };
+    const clearMsg = () => { const el = qs('#msg'); el.textContent=''; el.className='hidden'; };
+    const readJSON = (k,d) => { const v = localStorage.getItem(k); if(!v) return d; try{ return JSON.parse(v);}catch{ return d; } };
+    const writeJSON = (k,v) => localStorage.setItem(k, JSON.stringify(v));
     function derangementWithFixed(names, fixedFrom, fixedTo) {
       const N = names.slice();
       if (!N.includes(fixedFrom) || !N.includes(fixedTo)) return null;
       if (fixedFrom === fixedTo) return null;
-      const recipients = N.filter(n => n !== fixedTo);
       const givers = N.filter(n => n !== fixedFrom);
-      let shuffled = recipients.slice();
-      for (let tries = 0; tries < 1000; tries++) {
+      const recipients = N.filter(n => n !== fixedTo);
+      for (let tries = 0; tries < 2000; tries++) {
+        const shuffled = recipients.slice();
         for (let i = shuffled.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
         let ok = true;
-        for (let i = 0; i < givers.length; i++) {
-          if (shuffled[i] === givers[i]) { ok = false; break; }
-        }
-        if (ok) break;
+        for (let i = 0; i < givers.length; i++) { if (givers[i] === shuffled[i]) { ok = false; break; } }
+        if (!ok) continue;
+        const map = {};
+        map[fixedFrom] = fixedTo;
+        for (let i = 0; i < givers.length; i++) map[givers[i]] = shuffled[i];
+        const seen = new Set(Object.values(map));
+        if (seen.size !== N.length) continue;
+        return map;
       }
-      for (let i = 0; i < givers.length; i++) {
-        if (shuffled[i] === givers[i]) {
-          const swapWith = i === givers.length - 1 ? i - 1 : i + 1;
-          [shuffled[i], shuffled[swapWith]] = [shuffled[swapWith], shuffled[i]];
-        }
-      }
-      for (let i = 0; i < givers.length; i++) {
-        if (shuffled[i] === givers[i]) return null;
-      }
-      const map = {};
-      map[fixedFrom] = fixedTo;
-      for (let i = 0; i < givers.length; i++) map[givers[i]] = shuffled[i];
-      return map;
+      return null;
     }
-    function showView(id) {
-      qsa('.card').forEach(hide);
-      show(qs(id));
-    }
-    function togglePassword(inputId, btnId) {
-      const inp = qs(inputId);
-      const btn = qs(btnId);
-      const isPwd = inp.type === 'password';
-      inp.type = isPwd ? 'text' : 'password';
-      btn.textContent = isPwd ? 'Ocultar' : 'Mostrar';
-    }
-    async function handleRegister() {
-      clearMsg(qs('#reg_msg'));
-      const name = qs('#reg_name').value.trim();
-      const pass = qs('#reg_pass').value.trim();
-      if (!name || !pass) return setMsg(qs('#reg_msg'), 'Completa nombre y contraseña');
-      if (!isLettersOnly(name)) return setMsg(qs('#reg_msg'), 'El nombre debe contener solo letras, sin espacios');
-      if (!isPasswordValid(pass)) return setMsg(qs('#reg_msg'), 'La contraseña debe ser exactamente 8 caracteres, letras y números');
-      const allowed = ALLOWED.some(n => n.toLowerCase() === name.toLowerCase());
-      if (!allowed) return setMsg(qs('#reg_msg'), 'El nombre debe coincidir con el listado de participantes');
-      const users = getUsers();
-      const exists = users.some(u => u.name.toLowerCase() === name.toLowerCase());
-      if (exists || name.toLowerCase() === 'admin') return setMsg(qs('#reg_msg'), 'El nombre ya existe');
-      const hash = await sha256(pass);
-      users.push({ name, passwordHash: hash, createdAt: nowISO() });
-      saveUsers(users);
-      setMsg(qs('#reg_msg'), 'Registro exitoso. Ahora inicia sesión.', 'success');
-      setTimeout(() => showView('#view-login'), 700);
-    }
-    async function handleLogin() {
-      clearMsg(qs('#login_msg'));
-      const name = qs('#login_name').value.trim();
-      const pass = qs('#login_pass').value.trim();
-      if (!name || !pass) return setMsg(qs('#login_msg'), 'Completa nombre y contraseña');
-      if (name === 'admin' && pass === 'sistemas2025') {
-        setSession({ name, isAdmin: true });
-        refreshAdmin();
-        showView('#view-admin');
-        return;
-      }
-      const users = getUsers();
-      const u = users.find(x => x.name.toLowerCase() === name.toLowerCase());
-      if (!u) return setMsg(qs('#login_msg'), 'Usuario no encontrado');
-      const hash = await sha256(pass);
-      if (hash !== u.passwordHash) return setMsg(qs('#login_msg'), 'Contraseña incorrecta');
-      setSession({ name: u.name, isAdmin: false });
-      refreshDiscover();
-      showView('#view-discover');
-    }
-    function handleLogout() {
-      clearSession();
-      showView('#view-login');
-    }
-    async function handleChangePassword() {
-      clearMsg(qs('#cp_msg'));
-      const name = qs('#cp_name').value.trim();
-      const newPass = qs('#cp_new').value.trim();
-      if (!name || !newPass) return setMsg(qs('#cp_msg'), 'Completa nombre y nueva contraseña');
-      if (!isLettersOnly(name)) return setMsg(qs('#cp_msg'), 'El nombre debe contener solo letras, sin espacios');
-      const allowed = ALLOWED.some(n => n.toLowerCase() === name.toLowerCase());
-      if (!allowed) return setMsg(qs('#cp_msg'), 'El nombre debe coincidir con el listado de participantes');
-      if (!isPasswordValid(newPass)) return setMsg(qs('#cp_msg'), 'La nueva contraseña debe ser exactamente 8 caracteres, letras y números');
-      const users = getUsers();
-      const idx = users.findIndex(u => u.name.toLowerCase() === name.toLowerCase());
-      if (idx === -1) return setMsg(qs('#cp_msg'), 'Usuario no existe');
-      const newHash = await sha256(newPass);
-      users[idx].passwordHash = newHash;
-      users[idx].updatedAt = nowISO();
-      saveUsers(users);
-      setMsg(qs('#cp_msg'), 'Contraseña actualizada', 'success');
-    }
-    async function refreshAdmin() {
-      await ensureUsersKey();
-      const users = getUsers();
-      const reveals = getReveals();
-      const draw = getDraw();
-      qs('#kpi_users').textContent = users.length.toString();
-      const revealedCount = Object.values(reveals).filter(r => r.revealed).length;
-      qs('#kpi_revealed').textContent = revealedCount.toString();
-      const meta = readJSON(K.drawMeta, null);
-      if (draw && meta) {
-        qs('#kpi_draw').textContent = 'Generado';
-        qs('#kpi_draw').className = 'val pill';
-      } else {
-        qs('#kpi_draw').textContent = 'Sin sorteo';
-        qs('#kpi_draw').className = 'val pill';
-      }
-      const tbody = qs('#users_tbody');
+    function getAssignments() { return readJSON(K.draw, null); }
+    function setAssignments(m) { writeJSON(K.draw, m); }
+    function clearAssignments() { localStorage.removeItem(K.draw); localStorage.removeItem(K.sent); }
+    function getSent() { return readJSON(K.sent, {}); }
+    function setSent(name, status) { const s = getSent(); s[name] = status; writeJSON(K.sent, s); }
+    function renderTable() {
+      const tbody = qs('#tbody');
       tbody.innerHTML = '';
-      users.forEach(u => {
-        const r = reveals[u.name] || { revealed: false, revealedAt: '' };
-        const assigned = draw ? (draw[u.name] || '') : '';
+      const map = getAssignments() || {};
+      const sent = getSent();
+      for (let i = 0; i < people.length; i++) {
+        const p = people[i];
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${u.name}</td>
-          <td>${r.revealed ? 'Sí' : 'No'}</td>
-          <td>${r.revealedAt ? new Date(r.revealedAt).toLocaleString() : ''}</td>
-          <td>${assigned}</td>
-        `;
+        tr.innerHTML = `<td>${p.name}</td><td>${p.email}</td><td>${map[p.name]||''}</td><td>${sent[p.name]||''}</td>`;
         tbody.appendChild(tr);
-      });
-      qs('#generateBtn').disabled = !!draw;
-    }
-    function refreshDiscover() {
-      clearMsg(qs('#discover_msg'));
-      hide(qs('#discover_greeting'));
-      hide(qs('#revealed_info'));
-      const s = getSession();
-      if (!s || s.isAdmin) return;
-      const name = s.name;
-      const d = getDraw();
-      if (!d) {
-        return setMsg(qs('#discover_msg'), 'Aún no se generó el sorteo. Intenta más tarde.');
-      }
-      const r = getReveal(name);
-      if (r.revealed) {
-        const assigned = assignmentFor(name);
-        qs('#discover_greeting').textContent = `Hola ${name}, tu amigo secreto es ${assigned}`;
-        show(qs('#discover_greeting'));
-        qs('#revealed_info').textContent = `Revelado el ${new Date(r.revealedAt).toLocaleString()}`;
-        show(qs('#revealed_info'));
       }
     }
-    function handleReveal() {
-      const s = getSession();
-      if (!s || s.isAdmin) return;
-      const name = s.name;
-      const assigned = assignmentFor(name);
-      if (!assigned) return setMsg(qs('#discover_msg'), 'Aún no se generó el sorteo.');
-      setReveal(name);
-      qs('#discover_greeting').textContent = `Hola ${name}, tu amigo secreto es ${assigned}`;
-      show(qs('#discover_greeting'));
-      const r = getReveal(name);
-      qs('#revealed_info').textContent = `Revelado el ${new Date(r.revealedAt).toLocaleString()}`;
-      show(qs('#revealed_info'));
+    function composeSubject(name, assigned) {
+      return `✨ Con cariño, tu Amigo Secreto — ${name}`;
     }
-    function openImportPanel() {
-      clearMsg(qs('#admin_msg'));
-      qs('#import_text').value = '';
-      show(qs('#import_panel'));
+    function composeHtml(name, assigned) {
+      return `
+      <div style="font-family:Arial, sans-serif; color:#0b1b2b">
+        <h2 style="color:#3ebd93;margin:0 0 10px 0">¡Hola ${name}!</h2>
+        <p style="margin:10px 0">
+          Con mucha alegría queremos contarte que tu <strong>Amigo Secreto</strong> es:
+        </p>
+        <div style="background:#12263a;border:1px solid #244869;border-radius:10px;padding:12px;margin:10px 0">
+          <h3 style="color:#60a5fa;margin:0;text-align:center">${assigned}</h3>
+        </div>
+        <p style="margin:10px 0">
+          Te invitamos a sorprenderle con un detalle especial. Mantén la chispa del secreto,
+          comparte sonrisas y deja que la magia de estas fechas los acerque. 🎄💫
+        </p>
+        <p style="margin:10px 0">
+          Gracias por ser parte. ¡Que la ilusión y la calidez te acompañen en cada momento!
+        </p>
+        <hr style="border:none;border-top:1px solid #e2e8f0;margin:16px 0"/>
+        <p style="font-size:12px;color:#64748b;margin:0">
+          Enviado automáticamente para el juego de Amigo Secreto.
+        </p>
+      </div>
+      `;
     }
-    function cancelImportPanel() {
-      hide(qs('#import_panel'));
-    }
-    function doImportUsers() {
-      clearMsg(qs('#admin_msg'));
-      const txt = qs('#import_text').value.trim();
-      if (!txt) return setMsg(qs('#admin_msg'), 'Pega un JSON válido de usuarios');
-      let incoming = null;
-      try { incoming = JSON.parse(txt); } catch { return setMsg(qs('#admin_msg'), 'JSON inválido'); }
-      if (!Array.isArray(incoming) || !incoming.length) return setMsg(qs('#admin_msg'), 'El JSON debe ser un arreglo con usuarios');
-      const valid = incoming.filter(x => x && typeof x.name === 'string' && typeof x.passwordHash === 'string');
-      if (!valid.length) return setMsg(qs('#admin_msg'), 'El JSON no contiene usuarios válidos');
-      const existing = getUsers();
-      const byName = new Map(existing.map(u => [u.name.toLowerCase(), u]));
-      for (let i = 0; i < valid.length; i++) {
-        const u = valid[i];
-        const key = u.name.toLowerCase();
-        byName.set(key, {
-          name: u.name,
-          passwordHash: u.passwordHash,
-          createdAt: u.createdAt || nowISO(),
-          updatedAt: nowISO()
-        });
-      }
-      const merged = Array.from(byName.values());
-      saveUsers(merged);
-      hide(qs('#import_panel'));
-      setMsg(qs('#admin_msg'), 'Usuarios importados y guardados.', 'success');
-      refreshAdmin();
-    }
-    async function handleExportUsers() {
-      clearMsg(qs('#admin_msg'));
-      const users = getUsers();
-      if (!users.length) return setMsg(qs('#admin_msg'), 'No hay usuarios para exportar');
-      const json = JSON.stringify(users);
-      qs('#export_text').value = json;
-      show(qs('#export_panel'));
+    async function sendEmail(to, subject, html) {
+      const body = { destinatarios: [to], asunto: subject, cuerpo: html };
       try {
-        await navigator.clipboard.writeText(json);
-        setMsg(qs('#admin_msg'), 'JSON copiado al portapapeles', 'success');
-      } catch {
-        setMsg(qs('#admin_msg'), 'Copia el JSON mostrado en el panel de exportación', 'success');
+        const res = await fetch(SERVER_EMAIL_URL, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json', 'Accept':'*/*' },
+          body: JSON.stringify(body),
+          mode:'cors'
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return { verified: true };
+      } catch (e) {
+        try {
+          await fetch(SERVER_EMAIL_URL, {
+            method:'POST',
+            headers:{ 'Content-Type':'text/plain' },
+            body: JSON.stringify(body),
+            mode:'no-cors',
+            keepalive:true
+          });
+          return { verified: false };
+        } catch {
+          throw e;
+        }
       }
-    }
-    function closeExportPanel() {
-      hide(qs('#export_panel'));
     }
     function handleGenerate() {
-      clearMsg(qs('#admin_msg'));
-      const users = getUsers();
-      if (users.length < 2) return setMsg(qs('#admin_msg'), 'Se requieren al menos 2 usuarios para el sorteo');
-      if (getDraw()) return setMsg(qs('#admin_msg'), 'El sorteo ya existe. Usa Reset si deseas regenerar.');
-      const names = users.map(u => u.name);
-      const carlos = users.find(u => u.name.toLowerCase() === 'carlos')?.name;
-      const betsy = users.find(u => u.name.toLowerCase() === 'betsy')?.name;
-      let map = null;
-      if (carlos && betsy) {
-        map = derangementWithFixed(names, carlos, betsy);
-      } else {
-        map = derangement(names);
-      }
-      if (!map) return setMsg(qs('#admin_msg'), 'No fue posible generar el sorteo');
-      saveDraw(map);
-      setMsg(qs('#admin_msg'), 'Sorteo generado y guardado.', 'success');
-      refreshAdmin();
+      clearMsg();
+      if (getAssignments()) { setMsg('Ya existe un sorteo. Usa Reset para regenerar.', 'error'); return; }
+      const names = people.map(p => p.name);
+      const map = derangementWithFixed(names, 'Carlos', 'Betsy');
+      if (!map) { setMsg('No fue posible generar el sorteo. Intenta de nuevo.', 'error'); return; }
+      setAssignments(map);
+      setMsg('Sorteo generado y guardado.', 'success');
+      renderTable();
     }
     function handleReset() {
-      clearMsg(qs('#admin_msg'));
-      clearDraw();
-      saveReveals({});
-      setMsg(qs('#admin_msg'), 'Sorteo y estados reiniciados.', 'success');
-      refreshAdmin();
+      clearAssignments();
+      setMsg('Sorteo y estados de envío reiniciados.', 'success');
+      renderTable();
     }
-    function handleFullReset() {
-      clearMsg(qs('#admin_msg'));
-      if (!confirm('¿Borrar todos los registros? Esta acción es irreversible.')) return;
-      localStorage.clear();
-      setMsg(qs('#admin_msg'), 'Todos los registros, sorteo y revelados borrados.', 'success');
-      refreshAdmin();
+    async function handleSend() {
+      clearMsg();
+      const map = getAssignments();
+      if (!map) { setMsg('Primero genera el sorteo.', 'error'); return; }
+      for (let i = 0; i < people.length; i++) {
+        const p = people[i];
+        const assigned = map[p.name];
+        if (!assigned) { setSent(p.name, 'sin asignación'); continue; }
+        const subject = composeSubject(p.name, assigned);
+        const html = composeHtml(p.name, assigned);
+        try {
+          const r = await sendEmail(p.email, subject, html);
+          setSent(p.name, r.verified ? 'enviado' : 'enviado*');
+        } catch (e) {
+          setSent(p.name, 'error');
+        }
+      }
+      setMsg('Proceso de envío finalizado.', 'success');
+      renderTable();
     }
-    function handleClearStorage() {
-      clearMsg(qs('#admin_msg'));
-      if (!confirm('Esto eliminará todo el almacenamiento de este sitio. ¿Continuar?')) return;
-      localStorage.clear();
-      setMsg(qs('#admin_msg'), 'Almacenamiento limpio por completo.', 'success');
-      refreshAdmin();
-    }
-    async function boot() {
-      await ensureUsersKey();
-      qs('#goLoginBtn').addEventListener('click', () => showView('#view-login'));
-      qs('#goRegisterBtn').addEventListener('click', () => showView('#view-register'));
-      qs('#registerBtn').addEventListener('click', handleRegister);
-      qs('#loginBtn').addEventListener('click', handleLogin);
-      qs('#logoutBtn1').addEventListener('click', handleLogout);
-      qs('#logoutBtn2').addEventListener('click', handleLogout);
-      qs('#revealBtn').addEventListener('click', handleReveal);
+    function boot() {
       qs('#generateBtn').addEventListener('click', handleGenerate);
+      qs('#sendBtn').addEventListener('click', handleSend);
       qs('#resetBtn').addEventListener('click', handleReset);
-      qs('#fullResetBtn').addEventListener('click', handleFullReset);
-      qs('#importBtn').addEventListener('click', openImportPanel);
-      qs('#doImportBtn').addEventListener('click', doImportUsers);
-      qs('#cancelImportBtn').addEventListener('click', cancelImportPanel);
-      qs('#exportBtn').addEventListener('click', handleExportUsers);
-      qs('#closeExportBtn').addEventListener('click', closeExportPanel);
-      qs('#clearStorageBtn').addEventListener('click', handleClearStorage);
-      qs('#toggleRegPass').addEventListener('click', () => togglePassword('#reg_pass', '#toggleRegPass'));
-      qs('#toggleLoginPass').addEventListener('click', () => togglePassword('#login_pass', '#toggleLoginPass'));
-      qs('#toggleCpNew').addEventListener('click', () => togglePassword('#cp_new', '#toggleCpNew'));
-      qs('#changePassBtn').addEventListener('click', handleChangePassword);
-      qs('#goChangePassBtn').addEventListener('click', () => showView('#view-change-pass'));
-      qs('#backToLoginBtn').addEventListener('click', () => showView('#view-login'));
-      const s = getSession();
-      if (!s) showView('#view-login');
-      else if (s.isAdmin) { await refreshAdmin(); showView('#view-admin'); }
-      else { refreshDiscover(); showView('#view-discover'); }
+      renderTable();
     }
     document.addEventListener('DOMContentLoaded', boot);
   </script>
